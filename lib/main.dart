@@ -78,14 +78,9 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                print(queNumber);
-
                 setState(() {
+                  checkTrueAnswer(queNumber, answers[queNumber]);
                   queNumber++;
-                  scoreKeeper.add(Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  ));
                 });
               },
             ),
@@ -104,13 +99,10 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                print(queNumber);
                 setState(() {
+                  checkTrueAnswer(queNumber, !answers[queNumber]);
+
                   queNumber++;
-                  scoreKeeper.add(Icon(
-                    Icons.close,
-                    color: Colors.red,
-                  ));
                 });
               },
             ),
@@ -121,5 +113,19 @@ class _QuizPageState extends State<QuizPage> {
         ),
       ],
     );
+  }
+
+  void checkTrueAnswer(int queNumber, bool userAnswer) {
+    if (userAnswer) {
+      scoreKeeper.add(Icon(
+        Icons.check,
+        color: Colors.green,
+      ));
+    } else {
+      scoreKeeper.add(Icon(
+        Icons.close,
+        color: Colors.red,
+      ));
+    }
   }
 }
