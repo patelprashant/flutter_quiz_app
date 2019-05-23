@@ -51,7 +51,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.questionBank[queNumber].queText,
+                quizBrain.getQueText(queNumber),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -76,8 +76,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer(
-                      queNumber, quizBrain.questionBank[queNumber].queAns);
+                  checkAnswer(queNumber, quizBrain.getQueAns(queNumber));
                   queNumber++;
                 });
               },
@@ -98,9 +97,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer(
-                      queNumber, !quizBrain.questionBank[queNumber].queAns);
-
+                  checkAnswer(queNumber, !quizBrain.getQueAns(queNumber));
                   queNumber++;
                 });
               },
