@@ -76,10 +76,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  checkAnswer(quizBrain.getQueAns());
-                  quizBrain.nextQue();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -97,10 +94,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                setState(() {
-                  checkAnswer(!quizBrain.getQueAns());
-                  quizBrain.nextQue();
-                });
+                checkAnswer(false);
               },
             ),
           ),
@@ -113,16 +107,19 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void checkAnswer(bool userAnswer) {
-    if (userAnswer) {
-      scoreKeeper.add(Icon(
-        Icons.check,
-        color: Colors.green,
-      ));
-    } else {
-      scoreKeeper.add(Icon(
-        Icons.close,
-        color: Colors.red,
-      ));
-    }
+    setState(() {
+      if (userAnswer == quizBrain.getQueAns()) {
+        scoreKeeper.add(Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(Icon(
+          Icons.close,
+          color: Colors.red,
+        ));
+      }
+    });
+    quizBrain.nextQue();
   }
 }
