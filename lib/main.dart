@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Question.dart';
+
 void main() => runApp(QuizzlerApp());
 
 class QuizzlerApp extends StatelessWidget {
@@ -35,11 +37,19 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   int queNumber = 0;
   List<Icon> scoreKeeper = [];
-  List<String> questions = [
-    'You can lead a cow down stairs but not up stairs.',
-    'Approximately one quarter of human bones are in the feet.',
-    'A slug\'s blood is green.',
+//  Question q1 = Question(
+//      q: 'You can lead a cow down stairs but not up stairs.', a: false);
+//  Question q2 = Question(
+//      q: 'Approximately one quarter of human bones are in the feet.', a: true);
+//  Question q3 = Question(q: 'A slug\'s blood is green.', a: true);
+  List<Question> questionBank = [
+    Question(q: 'You can lead a cow down stairs but not up stairs.', a: false),
+    Question(
+        q: 'Approximately one quarter of human bones are in the feet.',
+        a: true),
+    Question(q: 'A slug\'s blood is green.', a: true)
   ];
+
   List<bool> answers = [false, true, true];
 
   @override
@@ -54,7 +64,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                questions[queNumber],
+                questionBank[queNumber].queText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -79,7 +89,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkTrueAnswer(queNumber, answers[queNumber]);
+                  checkAnswer(queNumber, questionBank[queNumber].queAns);
                   queNumber++;
                 });
               },
@@ -100,7 +110,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkTrueAnswer(queNumber, !answers[queNumber]);
+                  checkAnswer(queNumber, !answers[queNumber]);
 
                   queNumber++;
                 });
@@ -115,7 +125,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  void checkTrueAnswer(int queNumber, bool userAnswer) {
+  void checkAnswer(int queNumber, bool userAnswer) {
     if (userAnswer) {
       scoreKeeper.add(Icon(
         Icons.check,
