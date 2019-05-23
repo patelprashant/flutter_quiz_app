@@ -41,6 +41,7 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    queNumber++;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,7 +52,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                quizBrain.getQueText(queNumber),
+                quizBrain.getQueText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -76,8 +77,8 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer(queNumber, quizBrain.getQueAns(queNumber));
-                  queNumber++;
+                  checkAnswer(quizBrain.getQueAns());
+                  quizBrain.nextQue();
                 });
               },
             ),
@@ -97,8 +98,8 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 setState(() {
-                  checkAnswer(queNumber, !quizBrain.getQueAns(queNumber));
-                  queNumber++;
+                  checkAnswer(!quizBrain.getQueAns());
+                  quizBrain.nextQue();
                 });
               },
             ),
@@ -111,7 +112,7 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  void checkAnswer(int queNumber, bool userAnswer) {
+  void checkAnswer(bool userAnswer) {
     if (userAnswer) {
       scoreKeeper.add(Icon(
         Icons.check,
