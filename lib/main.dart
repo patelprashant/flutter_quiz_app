@@ -77,7 +77,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                checkAnswer(true);
+                showAnswer(true);
               },
             ),
           ),
@@ -95,7 +95,7 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               onPressed: () {
-                checkAnswer(false);
+                showAnswer(false);
               },
             ),
           ),
@@ -107,71 +107,83 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 
-  void checkAnswer(bool userAnswer) {
+  void showAnswer(bool userAnswer) {
     setState(() {
       if (quizBrain.isFinished()) {
-        Alert(
-          context: context,
-          title: "End of Quiz",
-          content: Column(
-            children: <Widget>[
-              Icon(
-                Icons.done_all,
-                size: 64.0,
-                color: Colors.green,
-              ),
-              Text(
-                'Here is your reslut:',
-                style: TextStyle(
-                  fontSize: 24.0,
-                ),
-              ),
-              Text(
-                'Correct Answers:$correctAns',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.green,
-                ),
-              ),
-              Text(
-                'Wrong Answers:$wrongAns',
-                style: TextStyle(
-                  fontSize: 16.0,
-                  color: Colors.red,
-                ),
-              ),
-            ],
-          ),
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Restart",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-          ],
-        ).show();
-        quizBrain.resetQue();
-        scoreKeeper = [];
-        correctAns = 0;
-        wrongAns = 0;
+        showAlert();
+        resetAll();
       } else {
-        if (userAnswer == quizBrain.getQueAns()) {
-          scoreKeeper.add(Icon(
-            Icons.check,
-            color: Colors.green,
-          ));
-          correctAns++;
-        } else {
-          scoreKeeper.add(Icon(
-            Icons.close,
-            color: Colors.red,
-          ));
-          wrongAns++;
-        }
+        checkAnswer(userAnswer);
       }
     });
     quizBrain.nextQue();
+  }
+
+  void checkAnswer(bool userAnswer) {
+    if (userAnswer == quizBrain.getQueAns()) {
+      scoreKeeper.add(Icon(
+        Icons.check,
+        color: Colors.green,
+      ));
+      correctAns++;
+    } else {
+      scoreKeeper.add(Icon(
+        Icons.close,
+        color: Colors.red,
+      ));
+      wrongAns++;
+    }
+  }
+
+  void showAlert() {
+    Alert(
+      context: context,
+      title: "End of Quiz",
+      content: Column(
+        children: <Widget>[
+          Icon(
+            Icons.done_all,
+            size: 64.0,
+            color: Colors.green,
+          ),
+          Text(
+            'Here is your reslut:',
+            style: TextStyle(
+              fontSize: 24.0,
+            ),
+          ),
+          Text(
+            'Correct Answers:$correctAns',
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.green,
+            ),
+          ),
+          Text(
+            'Wrong Answers:$wrongAns',
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.red,
+            ),
+          ),
+        ],
+      ),
+      buttons: [
+        DialogButton(
+          child: Text(
+            "Restart",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
+    ).show();
+  }
+
+  void resetAll() {
+    quizBrain.resetQue();
+    scoreKeeper = [];
+    correctAns = 0;
+    wrongAns = 0;
   }
 }
