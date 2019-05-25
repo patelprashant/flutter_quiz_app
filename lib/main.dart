@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quiz_app/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = new QuizBrain();
 
@@ -37,11 +38,11 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   int queNumber = 0;
+  int correctAns = 0;
+  int wrongAns = 0;
   List<Icon> scoreKeeper = [];
-
   @override
   Widget build(BuildContext context) {
-    queNumber++;
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -108,16 +109,67 @@ class _QuizPageState extends State<QuizPage> {
 
   void checkAnswer(bool userAnswer) {
     setState(() {
-      if (userAnswer == quizBrain.getQueAns()) {
-        scoreKeeper.add(Icon(
-          Icons.check,
-          color: Colors.green,
-        ));
+      if (quizBrain.isFinished()) {
+        Alert(
+          context: context,
+          title: "End of Quiz",
+          content: Column(
+            children: <Widget>[
+              Icon(
+                Icons.done_all,
+                size: 64.0,
+                color: Colors.green,
+              ),
+              Text(
+                'Here is your reslut:',
+                style: TextStyle(
+                  fontSize: 24.0,
+                ),
+              ),
+              Text(
+                'Correct Answers:$correctAns',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.green,
+                ),
+              ),
+              Text(
+                'Wrong Answers:$wrongAns',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.red,
+                ),
+              ),
+            ],
+          ),
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Restart",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        ).show();
+        quizBrain.resetQue();
+        scoreKeeper = [];
+        correctAns = 0;
+        wrongAns = 0;
       } else {
-        scoreKeeper.add(Icon(
-          Icons.close,
-          color: Colors.red,
-        ));
+        if (userAnswer == quizBrain.getQueAns()) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+          correctAns++;
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+          wrongAns++;
+        }
       }
     });
     quizBrain.nextQue();

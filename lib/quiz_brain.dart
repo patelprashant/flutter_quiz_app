@@ -1,4 +1,4 @@
-import 'Question.dart';
+import 'question.dart';
 
 class QuizBrain {
   int _queNum = 0;
@@ -32,9 +32,17 @@ class QuizBrain {
   ];
 
   void nextQue() {
-    if (_queNum < _questionBank.length - 1) {
+    if (!isFinished()) {
       _queNum++;
+    } else {
+      resetQue();
     }
+  }
+
+  bool isFinished() => _queNum >= _questionBank.length - 1;
+
+  void resetQue() {
+    _queNum = 0;
   }
 
   String getQueText() {
